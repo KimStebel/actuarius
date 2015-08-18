@@ -56,7 +56,7 @@ trait BlockParsers extends Parsers {
      * Represents a block of verbatim xml
      */
     class VerbatimXml(line:XmlChunk) extends MarkdownBlock {
-        def addResult(level:Int, out:StringBuilder) {out.append(line.content)}
+        def addResult(level:Int, out:StringBuilder) {out.append(this.deco.decorateXml(line.content))}
     }
 
     /**

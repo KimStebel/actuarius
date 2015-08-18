@@ -26,6 +26,7 @@ trait Decorator {
      * otherwise they are escaped and included as plain text
      */
     def allowVerbatimXml():Boolean = true
+    def decorateXml(xml:String) = xml
     /** used to print out manual line breaks (default: <br />)
      */
     def decorateBreak():String = "<br />"

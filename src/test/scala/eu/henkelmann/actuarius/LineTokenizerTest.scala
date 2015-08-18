@@ -1,6 +1,6 @@
 package eu.henkelmann.actuarius
 
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import org.scalatest.FlatSpec
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -9,8 +9,11 @@ import org.scalatest.junit.JUnitRunner
  * Tests the Line Tokenizer that prepares input for parsing.
  */
 @RunWith(classOf[JUnitRunner])
-class LineTokenizerTest extends LineTokenizer with FlatSpec with ShouldMatchers{
+class LineTokenizerTest extends FlatSpec with Matchers {
 
+    val lt = new LineTokenizer
+    import lt._
+  
     "The LineTokenizer" should "split input lines correctly" in {
         splitLines("line1\nline2\n") should equal (List("line1", "line2"))
         splitLines("line1\nline2 no nl") should equal (List("line1", "line2 no nl"))
@@ -51,6 +54,7 @@ new OtherLine("more text")
         def p(line:String) = {
             lineToken(new LineReader(Seq(line))) match {
                 case Success(result, _) => result
+                case _ => fail("match failure")
             }
         }
         p("a line")          should equal (new OtherLine("a line"))

@@ -1,7 +1,7 @@
 package eu.henkelmann.actuarius
 
 import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
@@ -9,7 +9,7 @@ import org.scalatest.junit.JUnitRunner
  * Tests Inline Parsing, i.e. emphasis , strong text, links, escapes etc.
  */
 @RunWith(classOf[JUnitRunner])
-class InlineParsersTest extends FlatSpec with ShouldMatchers with InlineParsers{
+class InlineParsersTest extends FlatSpec with Matchers with InlineParsers{
 
     ///////////////////////////////////////////////////////////////
     // Inline parsing Tests                                      //
@@ -25,7 +25,7 @@ class InlineParsersTest extends FlatSpec with ShouldMatchers with InlineParsers{
     }
 
     def runExceptionParsingTests(p:Parser[String], l:List[String]) {
-        for (s <- l) evaluating{apply(p, s)} should produce[IllegalArgumentException]
+        for (s <- l) an[IllegalArgumentException] should be thrownBy {apply(p, s)}
     }
 
     val italicTests:List[(String, String)] = List(
@@ -160,7 +160,7 @@ class InlineParsersTest extends FlatSpec with ShouldMatchers with InlineParsers{
     it should "create fast links" in {
         runSucceedingParsingTests(fastLink(new InlineContext()), fastLinkTests)
         val p = fastLink(new InlineContext())
-        evaluating(apply(p, "<this is not a fast link<span>")) should produce[IllegalArgumentException]
+        an[IllegalArgumentException] should be thrownBy (apply(p, "<this is not a fast link<span>"))
 
     }
 

@@ -1,6 +1,6 @@
 package eu.henkelmann.actuarius
 
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import org.scalatest.FlatSpec
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -9,7 +9,7 @@ import org.scalatest.junit.JUnitRunner
  * tests parsing of individual lines
  */
 @RunWith(classOf[JUnitRunner])
-class LineParsersTest extends FlatSpec with ShouldMatchers with LineParsers{
+class LineParsersTest extends FlatSpec with Matchers with LineParsers{
 
     "The LineParsers" should "parse horizontal rulers" in {
         val p = ruler
@@ -54,7 +54,7 @@ class LineParsersTest extends FlatSpec with ShouldMatchers with LineParsers{
         val p = emptyLine
         apply (p, "") should equal (new EmptyLine(""))
         apply (p, "  \t ") should equal (new EmptyLine("  \t "))
-        evaluating (apply (p, " not empty ")) should produce[IllegalArgumentException]
+        an[IllegalArgumentException] should be thrownBy (apply (p, " not empty "))
     }
 
     it should "parse arbitrary lines as OtherLine tokens" in {
@@ -67,7 +67,7 @@ class LineParsersTest extends FlatSpec with ShouldMatchers with LineParsers{
         apply(p, "> quote") should equal (new BlockQuoteLine("> ", "quote"))
         apply(p, ">     codequote") should equal (new BlockQuoteLine("> ", "    codequote"))
         apply(p, "   >     codequote") should equal (new BlockQuoteLine("   > ", "    codequote"))
-        evaluating(apply(p, "not a quote")) should produce[IllegalArgumentException]
+        an[IllegalArgumentException] should be thrownBy(apply(p, "not a quote"))
     }
 
     it should "parse unordered item start lines" in {
@@ -80,9 +80,9 @@ class LineParsersTest extends FlatSpec with ShouldMatchers with LineParsers{
         apply(p, "   * \t  foo") should equal (new UItemStartLine("   * \t  ", "foo"))
         apply(p, "   * \t  foo  ") should equal (new UItemStartLine("   * \t  ", "foo  "))
 
-        evaluating(apply(p, "*foo")) should produce[IllegalArgumentException]
-        evaluating(apply(p, "    * foo")) should produce[IllegalArgumentException]
-        evaluating(apply(p, "1. foo")) should produce[IllegalArgumentException]
+        an[IllegalArgumentException] should be thrownBy(apply(p, "*foo"))
+        an[IllegalArgumentException] should be thrownBy(apply(p, "    * foo"))
+        an[IllegalArgumentException] should be thrownBy(apply(p, "1. foo"))
 
         apply(p, "* foo") should equal (new UItemStartLine("* ", "foo"))
         apply(p, "+ foo") should equal (new UItemStartLine("+ ", "foo"))
@@ -100,9 +100,9 @@ class LineParsersTest extends FlatSpec with ShouldMatchers with LineParsers{
         apply(p, "   4455. \t  foo") should equal (OItemStartLine("   4455. \t  ", "foo"))
         apply(p, "   9. \t  foo  ") should equal (OItemStartLine("   9. \t  ", "foo  "))
 
-        evaluating(apply(p, "1.foo")) should produce[IllegalArgumentException]
-        evaluating(apply(p, "    1. foo")) should produce[IllegalArgumentException]
-        evaluating(apply(p, "* foo")) should produce[IllegalArgumentException]
+        an[IllegalArgumentException] should be thrownBy(apply(p, "1.foo"))
+        an[IllegalArgumentException] should be thrownBy(apply(p, "    1. foo"))
+        an[IllegalArgumentException] should be thrownBy(apply(p, "* foo"))
     }
 
     it should "parse link definitions" in {
